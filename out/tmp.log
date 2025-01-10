@@ -1,10 +1,10 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2024.12.11)  10 JAN 2025 21:23
+This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2024.12.11)  10 JAN 2025 21:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/takumiishiguro/adrobo_abst_2024/tmp.tex
-(/home/takumiishiguro/adrobo_abst_2024/tmp.tex
+**/home/takumiishiguro/abstract/tmp.tex
+(/home/takumiishiguro/abstract/tmp.tex
 pLaTeX2e <2020-02-02>+2 (based on LaTeX2e <2020-02-02> patch level 2)
 L3 programming layer <2020-02-14> (/usr/share/texlive/texmf-dist/tex/platex/base/jarticle.cls
 Document Class: jarticle 2020/01/03 v1.8e Standard pLaTeX class
@@ -230,19 +230,21 @@ Overfull \hbox (8.53581pt too wide) in paragraph at lines 32--32
 [][][][] 
  []
 
+[1
 
-Underfull \hbox (badness 2384) in paragraph at lines 64--67
+
+
+]
+Underfull \hbox (badness 2384) in paragraph at lines 90--93
 \OT1/cmr/m/n/8 nam-ics --Part2--''\JY1/mc/m/n/8 ， \OT1/cmr/m/n/8 Pro-ceed-ings of the 79th Kan-sai
  []
 
 
-Underfull \hbox (badness 2401) in paragraph at lines 73--75
+Underfull \hbox (badness 2401) in paragraph at lines 99--101
 \OT1/cmr/m/n/8 ``Soft Land-ing Con-di-tion for Stair-climbing Robot
  []
 
-[1
-
-
+[2
 
 ] (out/tmp.aux)
 
@@ -251,11 +253,11 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
  ) 
 Here is how much of TeX's memory you used:
  2420 strings out of 481768
- 30006 string characters out of 5933619
+ 29982 string characters out of 5933619
  274002 words of memory out of 5000000
  17807 multiletter control sequences out of 15000+600000
  550670 words of font info for 95 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 30i,7n,31p,541b,427s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,7n,31p,533b,427s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on out/tmp.dvi (1 page, 6124 bytes).
+Output written on out/tmp.dvi (2 pages, 9556 bytes).
