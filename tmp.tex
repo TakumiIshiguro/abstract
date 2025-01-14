@@ -16,7 +16,7 @@
     \makeatletter
     \doctype{2024年度卒業論文概要}
     \title{視覚と行動のend-to-end学習により\\経路追従行動を模倣する手法の提案}{（経路選択の成功率向上を意図したネットワークの変更と実験的評価）}
-    \etitle{A proposal for an imitation method of path-tracking behavior\\by end-to-end learning of vision and action}{(Experimental evaluation of network changes\\ to improve route selection success rate)}
+    \etitle{A proposal for an imitation method of path-tracking behavior\\by end-to-end learning of vision and action}{(Modification of network and experimental evaluation aimed at improving route selection success rate)}
     
     \author{21C1011\hspace{.5zw}石黒巧}
     \eauthor{Takumi ISHIGURO}
@@ -45,8 +45,7 @@
     この手法は岡田らの手法をベースに，カメラ画像から通路の種類を分類し，シナリオに基づいて経路を選択する機能を追加している．
     % 春山らは、島田が作成した 50 例のシナリオから 7 例を選定している。
     春山らは，島田ら\cite{Shimada2020}が作成したシナリオから 7 例を選定し，目的地まで到達できることを確認している．
-    シナリオの選定理由の1つに，壁や床の色が類似しており，一貫性のある環境を対象としている．
-    選定外のシナリオでは，ホワイエを通過する必要があることや，地面の色が異なるエリアも対象となっているため，提案手法で自律走行できない可能性がある．
+    選定外のシナリオでは地面の色が変化したり広場などを通過したりするため，視覚に基づいて経路追従するのがより困難な環境の可能性がある．
     
     そこで本論文では，島田らが作成したシナリオの中で，春山らが検証していないシナリオについて，目的地まで経路追従できるかを確認する．
     また，経路追従の成功率を向上させるための改良も行う．
@@ -67,6 +66,7 @@
     \begin{figure*}[t]
         \centering
         \includegraphics[width=105mm]{./fig/haruyama/system.pdf}
+        \vspace{-1zh}
         \caption{Overview of proposed system by haruyama and others(Quoted from \cite{haruyama2023})}
         \label{fig:system}
     \end{figure*}
@@ -88,26 +88,29 @@
     Felipeら\cite{Codevilla2018}の先行研究を基に，\reffig{branched}に示すコマンドでモデルを分岐する形式のネットワークを構築した．
     % ネットワークの入力は春山らが作成したものと同様で 64×48 の RGB画像と\tabref{tab:cmd_dir}に示す,目標方向のワンホットベクトルで，出力はヨー方向の角速度である．
     % 損失関数や活性化関数などのパラメータは春山らの手法と同様である．
+    \vspace{-2zh}
     \begin{center}
         \begin{figure}[h]
             \includegraphics[width=0.475\textwidth]{./fig/ishiguro/branched.pdf}
+            \vspace{-2zh}
             \caption{Branched network}
             \label{fig:branched}
         \end{figure}
     \end{center}
-
+    \vspace{-2zh}
     \subsection{オフライン学習の併用}
     学習量を増やすため事前に取得したデータを使用し追学習を行う．
 
     \section{実験}%===========================
-    新たなエリアを含んだシナリオに関しても，ロボットが目的地へ到達可能であるか検証する．
+    春山らが未検証のシナリオに関しても，ロボットが目的地へ到達可能であるか検証する．
     \subsection{実験装置}
-    \reffig{gamma}に示すロボットを使用する．
+    \reffig{gamma}に実験に使用するロボットを示す．
     また，実験は千葉工業大学津田沼キャンパス 2 号館 3 階で行う．
     
     \begin{figure}[h]
         \centering
         \includegraphics[width=0.275\textwidth]{./fig/ishiguro/gamma.pdf}
+        \vspace{-1zh}
         \caption{Experimental setup}
         \label{fig:gamma}
     \end{figure}
@@ -132,13 +135,13 @@
 
     訓練後，ロボットが目的地まで到達できるか確認する.
     実験では，ロボットをシナリオのスタート地点，向きに配置し,シナリオを 1 例ずつ入力する．
-    途中で壁に衝突や，経路の選択を誤ることなく，目的地で停止した際に成功とする．
+    壁に衝突することなく正しい経路を選択し，目的地で停止した場合に成功とする．
 
     \subsection{実験結果}
     シナリオ 28 例中，24 例の成功を確認した．
-    失敗した場合では曲がり角で左折できなかった．
-    原因として，通路分類の結果の切り替わりが遅いことが考えられる．
-    目標方向を与えるタイミングが学習時より遅いため，左折できないことを確認した．
+    失敗した場合では曲がり角で曲がることができなかった．
+    原因として，通路分類モジュールの出力に遅れがあることが挙げられる．
+    解析の結果，経路追従モジュールへ目標方向を与えるタイミングが遅いため，曲がれないことを確認した．
 
     \section{結\hspace{2zw}言}%===========================
     春山らの先行研究では走行が確認されていないシナリオでも目的地まで経路追従できることを確認した．
