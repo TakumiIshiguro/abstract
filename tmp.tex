@@ -23,14 +23,15 @@
     
     \makeatother
     
-    \abstract{Recent research explores navigation using camera images.
-        Okada et al. proposed a method based on end-to-end imitation learning, mimicking navigation with a metric map and enabling path following via visual input.
-        Haruyama et al. extended this by combining scenario-based navigation and pathway classification, allowing robots to reach destinations.
-        However, their approach was limited to scenarios in specific areas, lacking validation in diverse environments.
-        This study investigates navigation feasibility in untested scenarios using an improved network and a combined online and offline training method.
-        Experiments confirmed navigation success even in challenging, unverified areas.
-        }
-    
+    \abstract{
+        Recent research explores navigation using camera images. 
+        Okada et al. proposed end-to-end learning for path-following from metric maps, using visual input. 
+        Haruyama et al. extended this by adding branching recognition from camera images and scenario-based path selection defined by Shimada et al.
+        Experiments confirmed robots could visually follow paths to destinations. 
+        However, Haruyama et al.'s tests were limited, with success in only 7 of 50 scenarios.
+        This study examines autonomous navigation feasibility in untested scenarios using only camera images. To improve results, network enhancements and new training methods were implemented. 
+        Tests in real-world environments confirmed successful navigation in previously unexplored scenarios. 
+    }
     \keywords{autonomouse moblie robot, end-to-end learning, navigation}
     
     \maketitle
@@ -39,10 +40,10 @@
     
     \section{緒\hspace{2zw}言}%===========================
     近年，ロボットにおけるカメラ画像を用いたナビゲーションの研究が進んでいる．
-    本研究室の岡田ら\cite{okada2020}はメトリックマップベースの経路追従行動を end-to-end 学習を用いて，模倣学習することで，視覚に基づくナビゲーション手法を提案した．
-    また，春山ら\cite{haruyama2023}はカメラ画像とシナリオに基づいて，目的地まで経路追従するシステムを提案している．
+    本研究室の岡田ら\cite{okada2020}はメトリックマップベースの経路追従行動を end-to-end 学習を用いて模倣学習することで，視覚に基づくナビゲーション手法を提案した．
+    また，春山ら\cite{haruyama2023}はカメラ画像とシナリオに基づいて目的地まで経路追従するシステムを提案した．
     % シナリオとは島田らが提案した,「条件」と「行動」に関する単語を組みわせて構成されている.
-    この手法は岡田らの手法をベースに，カメラ画像から通路の種類を分類し，シナリオに基づいて経路を選択する機能を追加している．
+    この手法は岡田らの手法をベースに，カメラ画像から通路の種類を分類し，シナリオに基づいて経路を選択する機能を追加した．
     % 春山らは、島田が作成した 50 例のシナリオから 7 例を選定している。
     春山らは，島田ら\cite{Shimada2020}が作成したシナリオから 7 例を選定し，目的地まで到達できることを確認している．
     選定外のシナリオでは地面の色が変化したり広場などを通過したりするため，視覚に基づいて経路追従するのがより困難な環境の可能性がある．
@@ -65,6 +66,7 @@
     通路分類モジュールが条件達成を検出し，次の行動に遷移する．
     \begin{figure*}[t]
         \centering
+        \vspace{-1.5zh}
         \includegraphics[width=105mm]{./fig/haruyama/system.pdf}
         \vspace{-1zh}
         \caption{Overview of proposed system by haruyama and others(Quoted from \cite{haruyama2023})}
@@ -85,10 +87,12 @@
     \section{機能の改善}%===========================
     経路追従モジュールに関して，経路追従の可能性を向上させるために２点変更を加えた．
     \subsection{ネットワークの変更}
-    Felipeら\cite{Codevilla2018}の先行研究を基に，\reffig{branched}に示すコマンドでモデルを分岐する形式のネットワークを構築した．
-    % ネットワークの入力は春山らが作成したものと同様で 64×48 の RGB画像と\tabref{tab:cmd_dir}に示す,目標方向のワンホットベクトルで，出力はヨー方向の角速度である．
+    % Felipeらの先行研究\cite{Codevilla2018}によると，目標方向などのコマンドによってモデルを分岐する形式のネットワークが，春山らが使用していた形式より経路追従の成功率が高いと報告している．
+    Felipeらの先行研究\cite{Codevilla2018}によると，目標方向などのコマンドによってモデルを使い分ける形式のネットワークが経路追従の成功率が高いと報告している．
+    そのため，Felipeら\cite{Codevilla2018}が提案した形式を基に，\reffig{branched}に示すネットワークを構築した．
+    ネットワークの入力は春山らと同様で 64×48 の RGB画像と目標方向のワンホットベクトルで，出力はヨー方向の角速度である．
     % 損失関数や活性化関数などのパラメータは春山らの手法と同様である．
-    \vspace{-2zh}
+    \vspace{-1zh}
     \begin{center}
         \begin{figure}[h]
             \includegraphics[width=0.475\textwidth]{./fig/ishiguro/branched.pdf}
@@ -97,19 +101,23 @@
             \label{fig:branched}
         \end{figure}
     \end{center}
-    \vspace{-2zh}
+    \vspace{-3zh}
+
     \subsection{オフライン学習の併用}
-    学習量を増やすため事前に取得したデータを使用し追学習を行う．
+    春山らの研究では，取得したデータを逐次学習するオンライン学習を用いていた．
+    オンライン学習の問題点として，後半に取得したデータの学習回数が減少することで，走行できない箇所が生じる可能性がある．
+    この問題を解決するために，オフライン学習を併用する．
+    ここでオフライン学習とはオンライン学習の際に作成したデータセットを使用して追学習することを指す．
+
 
     \section{実験}%===========================
     春山らが未検証のシナリオに関しても，ロボットが目的地へ到達可能であるか検証する．
     \subsection{実験装置}
     \reffig{gamma}に実験に使用するロボットを示す．
-    また，実験は千葉工業大学津田沼キャンパス 2 号館 3 階で行う．
     
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.275\textwidth]{./fig/ishiguro/gamma.pdf}
+        \includegraphics[width=0.25\textwidth]{./fig/ishiguro/gamma.pdf}
         \vspace{-1zh}
         \caption{Experimental setup}
         \label{fig:gamma}
@@ -123,11 +131,9 @@
     %         \label{fig:route}
     %     \end{figure}
     % \end{center}
-
-    訓練時にはオンライン学習を行いながら，すべての三叉路に侵入，脱出を行うルートを 1 周走行する．
-    次に作成したモデルに追加でオフライン学習を行う．
-    オフライン学習のデータセットにはオンライン学習の際に作成したルート 1 周分のデータを使用し，epoch数は 20 とした．
-   
+    実験環境として千葉工業大学津田沼キャンパス 2 号館 3 階を用いる．
+    訓練時にはオンライン学習を行いながら，ルートを 1 周走行する．
+    次に作成したモデルに追加でオフライン学習を行う．   
     % \subsubsection{通路分類モジュールの訓練}
     % % \figref{fig:route}に示すルートをROS の navigation パッケージを使用して，経路を 1 周する．
     % その際， 3 つのカメラからそれぞれ画像データを収集しながら走行する．
@@ -145,6 +151,7 @@
 
     \section{結\hspace{2zw}言}%===========================
     春山らの先行研究では走行が確認されていないシナリオでも目的地まで経路追従できることを確認した．
+    失敗した要因として通路分類モジュールの出力が遅れることが考えられる．
 
     \vspace{5truemm}
     {\footnotesize
